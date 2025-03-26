@@ -2,16 +2,20 @@
 import { error } from 'console'
 import { profileSchema, validateWithZod } from "@/utils/schemas";
 
-// const profileSchema = z.string().min(2,{message:"อักขระต้องมากกว่า 2 อักขระ"})
+const renderError = (error: unknown): { message: string } => {
+    return {
+        message: error instanceof Error ? error.message  :  'An error server'
+    }
+};
 
-export const createProfile = async (prevState:any, formData: FormData) => {
+export const createProfile = async (prevState: any, formData: FormData) => {
     try {
         const rawData = Object.fromEntries(formData)
-        const validateField = validateWithZod(profileSchema,rawData);
-        console.log('validateField',validateField)
-        return { message : 'Create Profile Success!!!'}
+        const validateField = validateWithZod(profileSchema, rawData);
+        console.log('validateField', validateField)
+        return { message: 'Create Profile Success!!!' }
     } catch {
         console.log(error);
-        return { message: error.message || 'An error server'}
+        return renderError(error)
     }
-  };
+};
